@@ -11,17 +11,17 @@ int init(SDL_Window **window_ptr, SDL_Surface **screen_ptr)
 {
     // initilze SDL
     SDL_Init(SDL_INIT_EVERYTHING);
-    
+
     // create main window
     *window_ptr = *window_ptr = SDL_CreateWindow("Hack ISU", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, WINDOW_WIDTH, WINDOW_HEIGHT, SDL_WINDOW_OPENGL);
-    
+
     // check pointers
     if(*window_ptr == NULL)
         exit(1);
-    
+
     // create main surface
     *screen_ptr = SDL_GetWindowSurface(*window_ptr);
-    
+
     // check pointers
     if(*screen_ptr == NULL)
         exit(2);
@@ -81,18 +81,18 @@ void setImagePixelAtLocation(struct image *img, int x, int y, Uint32 newpixel)
 {
     Uint32 *pixel = (Uint32*)img->pixels;
 
-    pixel[y * img->width + x] = newpixel;
+    pixel[(y * img->width) + x] = newpixel;
 }
 
 void setSurfacePixelAtLocation(SDL_Surface *surf, int x, int y, Uint32 newpixel)
 {
     Uint32 *pixel = (Uint32*)surf->pixels;
-    
+
     pixel[(y * surf->w) + x] = newpixel;
 }
 
 SDL_Surface* createSurfaceFromImage(struct image *img)
-{    
+{
     SDL_Surface *surf = SDL_CreateRGBSurface(
             0,
             img->width,
@@ -102,13 +102,13 @@ SDL_Surface* createSurfaceFromImage(struct image *img)
             0,
             0,
             0);
-    
+
     int i, j;
     for(i = 0; i < img->width; i++)
     {
         for(j = 0; j < img->height; j++)
         {
-            setSurfacePixelAtLocation(surf, i, j, img->pixels[j * img->width + i]);
+            setSurfacePixelAtLocation(surf, i, j, img->pixels[(j * img->width) + i]);
         }
     }
 
