@@ -74,6 +74,7 @@ struct pixel_t getPixelFromImage(struct image *img, int x, int y)
     pix.blue = pixel[index] & (Uint8)img->format->Gmask;
     pix.green = pixel[index] & (Uint8)img->format->Bmask;
     pix.alpha = pixel[index] & (Uint8)img->format->Amask;
+    return pix;
 }
 
 SDL_Surface* createSurfaceFromImage(struct image *img)
