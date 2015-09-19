@@ -19,10 +19,12 @@ int main()
     SDL_Surface* img = loadImageForDisplay("twi.png", screen);
     struct image *img2 = createImageInfo(img);
     
-    printf("Pixels: %d, BitDepth: %d, Width: %d, Height: %d\n", img2->pixels, img2->bitdepth, img2->width, img2->height);
+    printf("Pixels: %d, Format: %d, BitDepth: %d, Width: %d, Height: %d\n", img2->pixels, img2->format, img2->bitdepth, img2->width, img2->height);
     struct pixel_t p = getPixelFromImage(img2, 0, 0);
     printf("Red: %d, Blue: %d, Green: %d, Alpha: %d\n", p.red, p.blue, p.green, p.alpha);
     
+    saveImage(img2, "out.png");
+
     // while running
     while(1)
     {

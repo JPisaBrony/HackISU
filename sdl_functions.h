@@ -8,5 +8,7 @@ SDL_Surface* loadImage(char* filename);
 SDL_Surface* loadImageForDisplay(char* filename, SDL_Surface *screen);
 struct image* createImageInfo(SDL_Surface *src);
 struct pixel_t getPixelFromImage(struct image *img, int x, int y);
+SDL_Surface* createSurfaceFromImage(struct image *img);
+void saveImage(struct image *img, char* outfile);
 
 #endif

@@ -76,4 +76,26 @@ struct pixel_t getPixelFromImage(struct image *img, int x, int y)
     pix.alpha = pixel[index] & (Uint8)img->format->Amask;
 }
 
+SDL_Surface* createSurfaceFromImage(struct image *img)
+{
+    SDL_Surface *surf = SDL_CreateRGBSurface(
+            0,
+            img->width,
+            img->height,
+            img->bitdepth,
+            img->format->Rmask,
+            img->format->Gmask,
+            img->format->Bmask,
+            img->format->Amask);
+    //surf->pixels = img->pixels;
+    return pix;
+}
+
+void saveImage(struct image *img, char* outfile)
+{
+    SDL_Surface *surf = createSurfaceFromImage(img);
+    IMG_SavePNG(surf, outfile);
+    SDL_FreeSurface(surf);
+}
+
 #endif
