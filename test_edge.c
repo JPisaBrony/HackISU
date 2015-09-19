@@ -14,4 +14,6 @@ int main(int argc, char **argv)
 	array_t *edges = identify_edges(img);
 
 	printf("length: %zu\n", edges->length);
+
+	free(img);
 }

@@ -4,8 +4,8 @@
 
 #include "sdl_functions.h"
 
-double TOLERANCE=10;
-size_t EDGE_SEARCH_DIST = 2;
+#define TOLERANCE 10
+#define EDGE_SEARCH_DIST 2
 
 
 bool locate_edge_dir(image_t *img, point_t start, point_t *border, int16_t inc, bool is_horz);
@@ -65,6 +65,8 @@ bool locate_edge_dir(image_t *img, point_t start, point_t *border, int16_t inc, 
 	{
 		*val -= inc;
 		*border = pos;
+		fprintf(stdout, "border: (%d, %d) ?= (%d, %d)\n", border->x, border->y, pos.x, pos.y);
+
 		return true;
 	}
 	else
@@ -104,7 +106,7 @@ bool is_edge(image_t *img, point_t base, point_t check)
 	}
 	return false;
 }
-
+#include <stdio.h>
 bool next_edge_point(image_t *img, array_t *visited, size_t visited_cnt, point_t *cur_point)
 {
 	uint32_t left = (cur_point->x < EDGE_SEARCH_DIST) ? 0 : cur_point->x - EDGE_SEARCH_DIST;
@@ -121,12 +123,15 @@ bool next_edge_point(image_t *img, array_t *visited, size_t visited_cnt, point_t
 			if (check.x == cur_point->x && check.y == cur_point->y) continue;
 			if (!is_edge(img, *cur_point, check)) continue;
 			
+			fprintf(stdout, "Hey! You got here, nya!\n");
 			if (visited_cnt > 1)
 			{
+				fprintf(stdout, "にゃ！\n");
 				bool already_visited = false;
 				// if already visited, skip:
-				for (size_t i = visited_cnt - 1; i > 0; i++) // reverse because last visited are in last
+				for (size_t i = visited_cnt - 1; i > 0; i--) // reverse because last visited are in last
 				{
+				//printf("%zd\n", i);	
 					point_t vis = ((point_t *) visited->elems)[i];
 					if (check.x == vis.x && check.y == vis.y)
 					{
@@ -137,6 +142,7 @@ bool next_edge_point(image_t *img, array_t *visited, size_t visited_cnt, point_t
 				if (already_visited) continue;
 			}
 			((point_t *) potential->elems)[pot_count++] = check;
+	fprintf(stdout, "後\n");
 		}
 	}
 	double close_dist = 1000;
