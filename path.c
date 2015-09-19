@@ -1,11 +1,15 @@
 #include "path.h"
 
+#include <stdbool.h>
+
+#include "sdl_functions.h"
+
 double TOLERANCE=10;
 size_t EDGE_SEARCH_DIST = 2;
 
 
 bool locate_edge_dir(image_t *img, point_t start, point_t *border, int16_t inc, bool is_horz);
-bool locate_edge(image_t *img, point_t start, point_t *border, bool *is_horz);
+bool locate_edge(image_t *img, point_t start, point_t *border);
 double color_dist(pixel_t c1, pixel_t c2);
 array_t *trace_path(image_t *img, point_t start);
 
@@ -18,24 +22,23 @@ array_t *identify_edges(image_t *img)
 		for (start.y = 0; start.y < img->height; start.y++)
 		{
 			point_t border;
-			bool is_horz; // whether edge type is horizontal
-			bool edge_found = locate_edge(img, start, &border, &is_horz);
+			bool edge_found = locate_edge(img, start, &border);
 			if (edge_found)
 			{
-				array_t path = trace_path(img, border, is_horz);
+				array_t *path = trace_path(img, border);
 				arr_resize(edges, edges->length + 1);
-				((array_t **)edges->elems)[i] = path;
+				((array_t **)edges->elems)[edges->length - 1] = path;
 			}
 		}
 	}
 	return edges;
 }
 
-bool locate_edge(image_t *img, point_t start, point_t *border, bool *is_horz)
+bool locate_edge(image_t *img, point_t start, point_t *border)
 {
-	return	(*is_horz = false && locate_edge_dir(img, start, border, 1, true)) ||
+	return	locate_edge_dir(img, start, border, 1, true) ||
 		locate_edge_dir(img, start, border, -1, true) ||
-		(*is_horz = true && locate_edge_dir(img, start, border, 1, false)) ||
+		locate_edge_dir(img, start, border, 1, false) ||
 		locate_edge_dir(img, start, border, -1, false);
 }
 
@@ -115,8 +118,8 @@ bool next_edge_point(image_t *img, array_t *visited, size_t visited_cnt, point_t
 	{
 		for (check.y = up; check.y < down; check.y++)
 		{
-			if (check.x == cur_point.x && check.y == cur_point.y) continue;
-			if (!is_edge(img, getPixelFromImage(img, check.x, check.y), *cur_point)) continue;
+			if (check.x == cur_point->x && check.y == cur_point->y) continue;
+			if (!is_edge(img, *cur_point, check)) continue;
 			
 			if (visited_cnt > 1)
 			{
@@ -152,12 +155,12 @@ bool next_edge_point(image_t *img, array_t *visited, size_t visited_cnt, point_t
 	return (pot_count != 0);
 }
 
-array_t *trace_path(image_t *img, point_t start, bool is_horz)
+array_t *trace_path(image_t *img, point_t start)
 {
 	size_t count = 0;
 	array_t *edge_points = arr_alloc(sizeof(point_t), 20);
 	point_t cur = start;
-	edge_points->items[count++] = start;
+	((point_t *) edge_points->elems)[count++] = start;
 	while (next_edge_point(img, edge_points, count, &cur))
 	{
 		if (count == edge_points->length)

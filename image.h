@@ -3,6 +3,9 @@
 
 //#include "array.h"
 
+#include <stdint.h>
+#include <SDL2/SDL.h>
+
 typedef struct pixel_t
 {
 	uint8_t red;
@@ -13,7 +16,7 @@ typedef struct pixel_t
 
 typedef struct image
 {
-	Uint32 *pixels;
+	uint32_t *pixels;
     SDL_PixelFormat *format;
 	uint8_t bitdepth;
 	int width;

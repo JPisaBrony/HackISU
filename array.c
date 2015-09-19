@@ -22,7 +22,7 @@ void arr_alloc_elems(array_t *arr, size_t elem_deref_size)
 
 void arr_resize(array_t *arr, size_t length)
 {
-	arr->elems = realloc(arr->elems, elem_size * length);
+	arr->elems = realloc(arr->elems, arr->elem_size * length);
 	arr->length = length;
 }
 
@@ -37,7 +37,7 @@ void arr_resize_safe(array_t *arr, size_t length)
 
 void arr_free_elems(array_t *arr)
 {
-	for (size_t i = length; i < arr->length; i++)
+	for (size_t i = 0; i < arr->length; i++)
 	{
 		free(((void **) arr->elems)[i]);
 	}

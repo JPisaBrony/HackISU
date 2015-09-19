@@ -1,8 +1,9 @@
 #include "image.h"
+#include "array.h"
 
 image_t *img_alloc(size_t width, size_t height, size_t bitdepth)
 {
-	image_t *img = malloc(sizeof(image_t));
+	/*image_t *img = malloc(sizeof(image_t));
 	img->pixels = malloc(sizeof(array_t));
 	img->pixels->ptr = malloc(sizeof(array_t *) * height);
 	img->pixels->size = height;
@@ -18,17 +19,18 @@ image_t *img_alloc(size_t width, size_t height, size_t bitdepth)
 	}
 	img->bitdepth = bitdepth;
 	img->width = width;
-	img->height = height;
+	img->height = height;*/
 }
 
 pixel_t *img_pixel(const image_t *img, size_t x, size_t y)
 {
-	return img->pixels->ptr[y]->ptr[x];
+//	return img->pixels->ptr[y]->ptr[x];
+	return NULL;
 }
 
 void img_free(image_t *img)
 {
-	for (size_t i = 0; i < img->height; i++)
+	/*for (size_t i = 0; i < img->height; i++)
 	{
 		for (size_t j = 0; j < width; j++)
 		{
@@ -39,5 +41,5 @@ void img_free(image_t *img)
 	}
 	free(img->pixels->ptr);
 	free(img->pixels);
-	free(img);
+	free(img);*/
 }

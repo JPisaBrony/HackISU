@@ -1,4 +1,5 @@
-#include "headers_and_globals.h"
+#include "sdl_functions.h"
+
 #include <stdio.h>
 #include "path.h"
 
@@ -13,5 +14,5 @@ int main(int argc, char **argv)
 	
 	array_t *edges = identify_edges(img);
 
-	printf("length: %d\n", array_t->length);
+	printf("length: %zu\n", edges->length);
 }

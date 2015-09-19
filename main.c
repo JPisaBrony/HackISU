@@ -1,11 +1,22 @@
-#include "headers_and_globals.h"
+#include "globals.h"
+
+#include <stdio.h>
+#include <SDL2/SDL.h>
+#include <SDL2/SDL_image.h>
+#include "image.h"
+
+#include "sdl_functions.h"
 
 int main()
 {
     // initilize
-    init();
+    SDL_Window *window = NULL;
+    SDL_Surface *screen = NULL;
+    SDL_Event event;
 
-    SDL_Surface* img = loadImageForDisplay("twi.png");
+    init(&window, &screen);
+
+    SDL_Surface* img = loadImageForDisplay("twi.png", screen);
     struct image *img2 = createImageInfo(img);
     
     printf("Pixels: %d, BitDepth: %d, Width: %d, Height: %d\n", img2->pixels, img2->bitdepth, img2->width, img2->height);
