@@ -10,5 +10,6 @@ struct image* createImageInfo(SDL_Surface *src);
 struct pixel_t getPixelFromImage(struct image *img, int x, int y);
 SDL_Surface* createSurfaceFromImage(struct image *img);
 void saveImage(struct image *img, char* outfile);
+void setPixelAtLocation(SDL_Surface *surf, int x, int y, Uint32 newpixel);
 
 #endif

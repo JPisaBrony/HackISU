@@ -77,18 +77,34 @@ struct pixel_t getPixelFromImage(struct image *img, int x, int y)
     return pix;
 }
 
-SDL_Surface* createSurfaceFromImage(struct image *img)
+void setPixelAtLocation(SDL_Surface *surf, int x, int y, Uint32 newpixel)
 {
+    Uint32 *pixel = (Uint32*)surf->pixels;
+    
+    pixel[(y * surf->w) + x] = newpixel;
+}
+
+SDL_Surface* createSurfaceFromImage(struct image *img)
+{    
     SDL_Surface *surf = SDL_CreateRGBSurface(
             0,
             img->width,
             img->height,
             img->bitdepth,
-            img->format->Rmask,
-            img->format->Gmask,
-            img->format->Bmask,
-            img->format->Amask);
-    //surf->pixels = img->pixels;
+            0,
+            0,
+            0,
+            0);
+    
+    int i, j;
+    for(i = 0; i < img->width; i++)
+    {
+        for(j = 0; j < img->height; j++)
+        {
+            setPixelAtLocation(surf, i, j, img->pixels[j * img->width + i]);
+        }
+    }
+
     return surf;
 }
 
