@@ -34,7 +34,7 @@ SDL_Surface* loadImage(char* filename)
     // check pointers
     if(img == NULL)
     {
-        printf("can't load loadImage");
+        printf("can't load '%s': %s\n", filename, IMG_GetError());
         exit(3);
     }
     return img;
