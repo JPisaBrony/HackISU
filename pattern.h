@@ -3,14 +3,11 @@
 
 #include <stdint.h>
 
-typedef struct pixel
-{
-	uint8_t red;
-	uint8_t blue;
-	uint8_t green;
-	uint8_t alpha;
-} pixel;
+#include "pixel.h"
 
-int get_color(
+// image must be an array_t that holds array_ts that holds pixel_ts
+//
+//
+pixel_t get_color(array_t *image, size_t bitdepth);
 
 #endif
