@@ -76,6 +76,32 @@ double color_dist(pixel_t c1, pixel_t c2)
 	return sqrt(pow(c1.red - c2.red, 2) + pow(c1.blue - c2.blue, 2) + pow(c1.green - c2.green, 2));
 }
 
+bool is_edge(image_t *img, point_t base, point_t check)
+{
+	pixel_t c1 = getPixelFromImage(img, base.x, base.y);
+	pixel_t c2 = getPixelFromImage(img, check.x, check.y);
+	if (color_dist(c1, c2) < TOLERANCE)
+	{
+		uint32_t left = (check.x < 1) ? 0 : check.x - 1;
+		uint32_t right = ((img->width - 1) - check.x < 1) ? img->width : check.x + 2;
+		uint32_t up = (check.y < 1) ? 0 : check.y - 1;
+		uint32_t down = ((img->height - 1) - check.y < 1) ? img->height : check.y + 2;
+		point_t bound;
+		for (bound.x = left; bound.x < right; bound.x++)
+		{
+			for (bound.y = up; bound.y < down; bound.y++)
+			{
+				if (bound.y == check.y && bound.x == check.x) continue;
+				if (color_dist(getPixelFromImage(img, bound.x, bound.y), c2) >= TOLERANCE)
+				{
+					return true;
+				}
+			}
+		}
+	}
+	return false;
+}
+
 bool next_edge_point(image_t *img, array_t *visited, size_t visited_cnt, point_t *cur_point)
 {
 	uint32_t left = (cur_point->x < EDGE_SEARCH_DIST) ? 0 : cur_point->x - EDGE_SEARCH_DIST;
@@ -83,23 +109,47 @@ bool next_edge_point(image_t *img, array_t *visited, size_t visited_cnt, point_t
 	uint32_t up = (cur_point->y < EDGE_SEARCH_DIST) ? 0 : cur_point->y - EDGE_SEARCH_DIST;
 	uint32_t down = ((img->height - 1) - cur_point->y < EDGE_SEARCH_DIST) ? img->height : cur_point->y + EDGE_SEARCH_DIST + 1;
 	point_t check;
+	array_t *potential = arr_alloc(sizeof(point_t), EDGE_SEARCH_DIST * EDGE_SEARCH_DIST -1);
+	size_t pot_count = 0;
 	for (check.x = left; check.x < right; check.x++)
 	{
 		for (check.y = up; check.y < down; check.y++)
 		{
-			bool already_visited = false;
-			// if already visited, skip:
-			for (size_t i = visited_cnt - 1; i > 0; i++) // reverse because last visited are in last
+			if (check.x == cur_point.x && check.y == cur_point.y) continue;
+			if (!is_edge(img, getPixelFromImage(img, check.x, check.y), *cur_point)) continue;
+			
+			if (visited_cnt > 1)
 			{
-				point_t vis = ((point_t *) visited->elems)[i];
-				if (check.x == vis.x && check.y == vis.y)
+				bool already_visited = false;
+				// if already visited, skip:
+				for (size_t i = visited_cnt - 1; i > 0; i++) // reverse because last visited are in last
 				{
-					already_visited = true;
-					break;
+					point_t vis = ((point_t *) visited->elems)[i];
+					if (check.x == vis.x && check.y == vis.y)
+					{
+						already_visited = true;
+						break;
+					}
 				}
+				if (already_visited) continue;
 			}
+			((point_t *) potential->elems)[pot_count++] = check;
 		}
 	}
+	double close_dist = 1000;
+	point_t next;
+	arr_resize(potential, pot_count);
+	for (size_t i = 0; i < potential->length; i++)
+	{
+		point_t p = ((point_t *) potential->elems)[i];
+		if (sqrt(pow(p.x - cur_point->x, 2) + pow(p.y - cur_point->y, 2)) < close_dist)
+		{
+			next = p;
+		}
+	}
+	if (pot_count != 0) *cur_point = next;
+	arr_free(potential);
+	return (pot_count != 0);
 }
 
 array_t *trace_path(image_t *img, point_t start, bool is_horz)
