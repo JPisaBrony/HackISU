@@ -77,7 +77,14 @@ struct pixel_t getPixelFromImage(struct image *img, int x, int y)
     return pix;
 }
 
-void setPixelAtLocation(SDL_Surface *surf, int x, int y, Uint32 newpixel)
+void setImagePixelAtLocation(struct image *img, int x, int y, Uint32 newpixel)
+{
+    Uint32 *pixel = (Uint32*)img->pixels;
+
+    pixel[y * img->width + x] = newpixel;
+}
+
+void setSurfacePixelAtLocation(SDL_Surface *surf, int x, int y, Uint32 newpixel)
 {
     Uint32 *pixel = (Uint32*)surf->pixels;
     
@@ -101,7 +108,7 @@ SDL_Surface* createSurfaceFromImage(struct image *img)
     {
         for(j = 0; j < img->height; j++)
         {
-            setPixelAtLocation(surf, i, j, img->pixels[j * img->width + i]);
+            setSurfacePixelAtLocation(surf, i, j, img->pixels[j * img->width + i]);
         }
     }
 
