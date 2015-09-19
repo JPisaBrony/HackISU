@@ -1,7 +1,7 @@
 #ifndef ARRAY_H_
 #define ARRAY_H_
 
-#include <stddet.h>
+#include <stddef.h>
 
 typedef struct array_t
 {

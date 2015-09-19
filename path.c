@@ -5,6 +5,7 @@ double TOLERANCE=10;
 bool locate_edge_dir(image_t *img, point_t start, point_t *border, int16_t inc, bool is_horz);
 bool locate_edge(image_t *img, point_t start, point_t *border);
 double color_dist(pixel_t c1, pixel_t c2);
+bool trace_path(image_t *img, point_t start);
 
 array_t *identify_edges(image_t *img)
 {
@@ -18,7 +19,7 @@ array_t *identify_edges(image_t *img)
 			bool edge_found = locate_edge(img, start, &border);
 			if (edge_found)
 			{
-				array_t path = trace_path(border);
+				array_t path = trace_path(img, border);
 				arr_resize(edges, edges->length + 1);
 				((array_t *)edges->elems)[i] = path;
 			}
