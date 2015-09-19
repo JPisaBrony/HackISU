@@ -43,7 +43,7 @@ SDL_Surface* loadImageForDisplay(char* filename)
     // load image
     SDL_Surface *img = loadImage(filename);
     // convert to screen format
-    opt_img = SDL_ConvertSurface(img, screen->format, NULL);
+    opt_img = SDL_ConvertSurface(img, screen->format, 0);
     // free old surface
     SDL_FreeSurface(img);
     // return optimized img
