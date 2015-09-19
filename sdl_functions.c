@@ -88,7 +88,7 @@ SDL_Surface* createSurfaceFromImage(struct image *img)
             img->format->Bmask,
             img->format->Amask);
     //surf->pixels = img->pixels;
-    return pix;
+    return surf;
 }
 
 void saveImage(struct image *img, char* outfile)
