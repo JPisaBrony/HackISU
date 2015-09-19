@@ -1,7 +1,7 @@
 #ifndef IMAGE_H_
 #define IMAGE_H_
 
-#include "array.h"
+//#include "array.h"
 
 typedef struct pixel_t
 {
@@ -13,10 +13,11 @@ typedef struct pixel_t
 
 typedef struct image
 {
-	array_t *pixels;
-	size_t bitdepth;
-	size_t width;
-	size_t height;
+	Uint32 *pixels;
+    SDL_PixelFormat *format;
+	uint8_t bitdepth;
+	int width;
+	int height;
 } image_t;
 
 image_t *img_malloc(size_t width, size_t height, size_t bitdepth);
