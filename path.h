@@ -2,8 +2,10 @@
 #define PATH_H_
 
 #include <stdint.h>
+#include <math.h>
 
 #include "array.h"
+#include "image.h"
 
 typedef struct point
 {
@@ -11,21 +13,23 @@ typedef struct point
 	uint32_t y;
 } point_t;
 
-bool locate_edge(pixel_t start, pixel_t *edge);
+double TOLERANCE=10;
 
-array_t *identify_edges(array_t *image)
+bool locate_edge(image_t *img, point_t start, point_t *border);
+double color_dist(pixel_t c1, pixel_t c2);
+
+array_t *identify_edges(image_t *img)
 {
 	array_t *edges = malloc(sizeof(array_t));
 	edges->ptr = malloc(0);
 	edges->size = 0;
-	for (size_t i = 0; i < image->size; i++)
+	point_t start;
+	for (start.x = 0; start.x < img->width; start.x++)
 	{
-		array_t *row = ((array_t *) image->ptr);
-		for (size_t j = 0; j < row->size; j++)
+		for (start.y = 0; start.y < img->height; start.y++)
 		{
-			pixel_t pix = ((pixel_t *) row->ptr)[j];
-			pixel_t border;
-			bool edge_found = locate_edge(pix, &border);
+			point_t border;
+			bool edge_found = locate_edge(img, start, &border);
 			if (edge_found)
 			{
 				array_t *path = trace_path(border)
@@ -38,9 +42,16 @@ array_t *identify_edges(array_t *image)
 	}
 }
 
-bool locate_edge(pixel_t start, pixel_t *edge)
+bool locate_edge(image_t *img, point_t start, point_t *border)
 {
+	// dont hit the edge of image
 	
+}
+
+// assumes same bit depth
+double color_dist(pixel_t c1, pixel_t c2)
+{
+	return sqrt(pow(c1.red - c2.red, 2) + pow(c1.blue - c2.blue, 2) + pow(c1.green - c2.green, 2));
 }
 
 #endif
