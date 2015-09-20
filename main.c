@@ -11,11 +11,11 @@
 int main(int argc, char* args[])
 {
     // check if there is a file supplied
-    //if(argc < 2)
-    //{
-    //    printf("No file supplied\n");
-    //    return 0;
-    //}
+    if(argc < 2)
+    {
+        printf("No file supplied\n");
+        return 0;
+    }
     
     // initilize SDL
     SDL_Init(SDL_INIT_EVERYTHING);
