@@ -1,6 +1,7 @@
 #include "globals.h"
 
 #include <stdio.h>
+#include <string.h>
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_image.h>
 #include "image.h"
@@ -28,11 +29,34 @@ int main(int argc, char* args[])
     
     struct colorArray *ca = getColorValues(img);
     
+    SDL_FreeSurface(img);
+    
     int i;
+    char* ca2[ca->size];
+    
+    for(i = 0; i < ca->size; i++)
+        ca2[i] = 0;
+
+    int currentValue = 0;
 
     for(i = 0; i < ca->size; i++)
-        printf("Colors: %d\n", ca->array[i]);
+    {
+        /*
+        char* compare = getNameValueFromColor(ca2[i]);
+        char* compare2 = getNameValueFromColor(ca->array[i]);
+        if(strcmp(compare, compare2) == 0)
+        {
+            ca2[currentValue] = compare;
+            currentValue++;
+        }*/
+        printf("Number: %d Name: %s\n", ca->array[i], getNameValueFromColor(ca->array[i]));
 
+    }
+    /*
+    for(i = 0; i < currentValue; i++)
+    {
+        printf("Name: %s\n", ca2[i]);
+    }*/
     /*
     // identify edges
     array_t *edges = identify_edges(img2);

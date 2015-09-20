@@ -125,7 +125,29 @@ struct colorArray* getColorValues(SDL_Surface *surf)
     ca->size = currentSize;
 
     return ca;
-}    
+}
+
+char* getNameValueFromColor(int pixel)
+{
+    char* value = "can't find color";
+    
+    if(pixel == 0xFFFFFF)
+        value = "white";
+    else if(pixel == 0x000000)
+        value = "black";
+    else if(pixel >= 0x0000FF && pixel <= 0x669999)
+        value = "blue";
+    else if(pixel >= 0xFF0000 && pixel <= 0x330000)
+        value = "red";
+    else if(pixel >= 0x001100 && pixel <= 0x00FFFF)
+        value = "green";
+    else if(pixel >= 0x6600CC && pixel <= 0x990099)
+        value = "purple";
+    else if(pixel >= 0xCCCC00 && pixel <= 0xFFFF00)
+        value = "yellow";
+
+    return value;
+}
 
 void setImagePixelAtLocation(struct image *img, int x, int y, Uint32 newpixel)
 {

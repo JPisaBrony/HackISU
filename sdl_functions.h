@@ -18,5 +18,6 @@ void saveImage(struct image *img, char* outfile);
 void setImagePixelAtLocation(struct image *img, int x, int y, Uint32 newpixel);
 void setSurfacePixelAtLocation(SDL_Surface *surf, int x, int y, Uint32 newpixel);
 struct colorArray* getColorValues(SDL_Surface *surf);
+char* getNameValueFromColor(int pixel);
 
 #endif
