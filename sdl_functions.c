@@ -69,13 +69,63 @@ struct pixel_t getPixelFromImage(struct image *img, int x, int y)
 {
     pixel_t pix;
     Uint32 *pixel = img->pixels;
-    int index = y * img->width + x;
+    int index = (y * img->width) + x;
     pix.red = pixel[index] & (Uint8)img->format->Rmask;
-    pix.blue = pixel[index] & (Uint8)img->format->Gmask;
-    pix.green = pixel[index] & (Uint8)img->format->Bmask;
+    pix.blue = pixel[index] & (Uint8)img->format->Bmask;
+    pix.green = pixel[index] & (Uint8)img->format->Gmask;
     pix.alpha = pixel[index] & (Uint8)img->format->Amask;
     return pix;
 }
+
+Uint32 getPixelFromSurface(SDL_Surface *surf, int x, int y)
+{
+    Uint32 *pixel = (Uint32*)surf->pixels;
+
+    return pixel[(y * surf->w) + x];
+}
+
+struct colorArray* getColorValues(SDL_Surface *surf)
+{
+    int i, j, k;
+
+    int size = surf->w * surf->h;
+    Uint32 colors[size];
+    for(i = 0; i < size; i++)
+        colors[i] = 0;
+
+    Uint32 pix;
+    int currentSize = 0;
+    int flag = 0;
+
+    for(i = 0; i < surf->w; i++)
+    {
+        for(j = 0; j < surf->h; j++)
+        {
+            pix = getPixelFromSurface(surf, i, j);
+            flag = 0;
+            for(k = 0; k < currentSize+1; k++)
+            {
+                if(pix == colors[k])
+                {
+                    flag = 0;
+                    break;
+                }
+                else if(pix != colors[k])
+                    flag = 1;
+            }
+            if(flag == 1) {
+                colors[currentSize] = pix;
+                currentSize++;
+            }
+        }
+    }
+    
+    struct colorArray *ca = malloc(sizeof(struct colorArray));
+    ca->array = colors;
+    ca->size = currentSize;
+
+    return ca;
+}    
 
 void setImagePixelAtLocation(struct image *img, int x, int y, Uint32 newpixel)
 {
