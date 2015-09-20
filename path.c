@@ -114,7 +114,7 @@ bool next_edge_point(image_t *img, array_t *visited, size_t visited_cnt, point_t
 	uint32_t up = (cur_point->y < EDGE_SEARCH_DIST) ? 0 : cur_point->y - EDGE_SEARCH_DIST;
 	uint32_t down = ((img->height - 1) - cur_point->y < EDGE_SEARCH_DIST) ? img->height : cur_point->y + EDGE_SEARCH_DIST + 1;
 	point_t check;
-	array_t *potential = arr_alloc(sizeof(point_t), EDGE_SEARCH_DIST * EDGE_SEARCH_DIST -1);
+	array_t *potential = arr_alloc(sizeof(point_t), pow(EDGE_SEARCH_DIST * 2 + 1, 2) - 1);
 	size_t pot_count = 0;
 	for (check.x = left; check.x < right; check.x++)
 	{

@@ -4,6 +4,7 @@
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_image.h>
 #include "image.h"
+#include "array.h"
 
 #include "sdl_functions.h"
 
@@ -15,13 +16,23 @@ int main(int argc, char* args[])
         printf("No file supplied\n");
         return 0;
     }
-    
+
     // initilize SDL
     SDL_Init(SDL_INIT_EVERYTHING);
     // create blank surface
     SDL_Surface *screen = SDL_CreateRGBSurface(0, 1, 1, 32, 0, 0, 0, 0);
     // load image
-    SDL_Surface* img = loadImageForDisplay(args[1], screen);
+    SDL_Surface* img = loadImageForDisplay(args[1], screen);	
+    // create image structure from surface
+    struct image *img2 = createImageInfo(img); 
+    // identify edges
+    array_t *edges = identify_edges(img2);
+    // print length
+	printf("length: %zu\n", edges->length);
+    // free up memory
+	free(img);
+
+    /*
     // create image structure from surface
     struct image *img2 = createImageInfo(img);
     // print info about structure
@@ -37,7 +48,7 @@ int main(int argc, char* args[])
 
     // save the image from the 
     saveImage(img2, "out.png");
-    
+    */   
     // quit
     SDL_Quit();
     return 0;
