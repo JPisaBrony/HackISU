@@ -49,7 +49,7 @@ int main(int argc, char* args[])
             ca2[currentValue] = compare;
             currentValue++;
         }*/
-        printf("Number: %d Name: %s\n", ca->array[i], getNameValueFromColor(ca->array[i]));
+        printf("Number: #%06X Name: %s\n", ca->array[i], getNameValueFromColor(ca->array[i]));
 
     }
     /*
