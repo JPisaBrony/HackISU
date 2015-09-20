@@ -9,6 +9,17 @@
 
 #include "sdl_functions.h"
 
+typedef struct color_range
+{
+	uint32_t upper_bound; // inclusive
+	uint32_t lower_bound; // exclusive, but inclusive if 0
+	char *name;
+} color_range_t;
+
+// returns an array of ptrs-to-color_range_t types.
+color_range *load_config(size_t *range_count);
+char *getNameValueFromColor(int pixel, color_range *options, size_t options_count);
+
 int main(int argc, char* args[])
 {
     // check if there is a file supplied
@@ -17,6 +28,9 @@ int main(int argc, char* args[])
         printf("No file supplied\n");
         return 0;
     }
+
+    size_t range_count = 0;
+    color_range_t *ranges = load_config(&range_count);
     
     // initilize SDL
     SDL_Init(SDL_INIT_EVERYTHING);
@@ -85,4 +99,34 @@ int main(int argc, char* args[])
     // quit
     SDL_Quit();
     return 0;
+}
+
+char* getNameValueFromColor(int pixel, color_range_t *options, size_t opt_count)
+{
+    char value[128];
+    bool set = false;
+    for (size_t i = 0; i < opt_count; i++)
+    {
+        color_range_t opt = options[i];
+	if ((pixel > opt.lower_bound || (pixel == opt.lower_bound && pixel == 0)) && // lower bound is inclusive iff 0.
+		(pixel >= opt.upper_bound))
+	{
+		strcpy(value, opt.name);
+		set = true;
+		break;
+	}
+    }
+    if (!set)
+    {
+	value = "can't find color";
+    }
+    return value;
+}
+
+color_range_t *load_config(size_t *config)
+{
+	FILE *fp = fopen("config.cfg", "r");
+	char name[128];
+	color_range_t *ranges = malloc(sizeof(color_range_t) * 64);
+	while (fscanf(fp, "%s\n", line) != NULL
 }
